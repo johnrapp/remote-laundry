@@ -4,7 +4,8 @@ const cheerio = require('cheerio');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 
-const port = 8080;
+var argv = require('minimist')(process.argv.slice(2));
+const port = argv.p || 8080;
 
 const app = express();
 
