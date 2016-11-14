@@ -20,7 +20,7 @@ const login = require('./login.js');
 
 app.use(express.static('public'));
 app.use(cookieParser());
-app.use(bodyParser.urlencoded());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(login.auth);
 app.use(login.router);
 
