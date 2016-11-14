@@ -15,5 +15,16 @@
   "bugs": {
     "url": "https://github.com/johnrapp/remote-laundy/issues"
   },
-  "homepage": "https://github.com/johnrapp/remote-laundy#readme"
+  "homepage": "https://github.com/johnrapp/remote-laundy#readme",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "cheerio": "^0.22.0",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.14.0",
+    "request": "^2.78.0"
+  },
+  "devDependencies": {
+    "eslint": "^3.10.0",
+    "eslint-plugin-node": "^3.0.3"
+  }
 }
