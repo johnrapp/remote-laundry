@@ -1,0 +1,19 @@
+{
+  "name": "remote-laundy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/johnrapp/remote-laundy.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/johnrapp/remote-laundy/issues"
+  },
+  "homepage": "https://github.com/johnrapp/remote-laundy#readme"
+}
