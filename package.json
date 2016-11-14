@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node .",
-    "production": "node . -p 8888",
+    "production": "node . -p 8088",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

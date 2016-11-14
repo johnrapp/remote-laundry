@@ -57,5 +57,10 @@ function generateHtml(body) {
 	$('.band.bottom-footer').remove();
 	$('script').remove();
 
+	const styleSheet = $('<link rel="stylesheet" type="text/css" href="style.css">');
+	$('head').append(styleSheet);
+
+	$('title').text('Tvätta på 1602');
+
 	return $.html();
 }
