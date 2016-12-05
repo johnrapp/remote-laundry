@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const credentials = require('./credentials.json');
 
-const cookieOptions = { maxAge: 900000 };
+const cookieOptions = { maxAge: 315360000000 };
 
 const auth = (req, res, next) => {
 	const { username, password } = req.cookies;
