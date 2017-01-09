@@ -12,6 +12,24 @@
 
 @media (max-width: 600px) {
 	table {
+    font-size: 10px;
+  }
+  table tr td, table tbody tr td {
 		font-size: 10px;
+  }
+}
+
+@media (max-width: 400px) {
+  table {
+    font-size: 7px;
+  }
+  table tr td, table tbody tr td {
+		font-size: 6px;
+  }
+  #tvattbokning table tr td {
+    padding: 0;
+  }
+	#tvattbokning table tr td img {
+		width: 8px;
 	}
 }
