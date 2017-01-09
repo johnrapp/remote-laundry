@@ -1,3 +1,15 @@
+.row .eight.columns {
+	width: 100%;
+}
+
+.row {
+    max-width: 800px;
+}
+
+#tvattbokning a {
+	cursor: default;
+}
+
 @media (max-width: 600px) {
 	table {
 		font-size: 10px;

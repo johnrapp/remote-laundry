@@ -1,0 +1,15 @@
+.row .three.columns {
+  width: 250px;
+  margin-left: 20px;
+}
+
+.row .eight.columns {
+  width: calc(100% - 270px);
+}
+
+
+@media (max-width: 600px) {
+	table {
+		font-size: 10px;
+  }
+}

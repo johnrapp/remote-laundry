@@ -16,7 +16,7 @@ router.post('/login', (req, res) => {
 	res.cookie('username', username, cookieOptions);
 	res.cookie('password', password, cookieOptions);
 
-	res.redirect('/');
+	res.redirect('/1602');
 });
 
 module.exports = {
