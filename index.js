@@ -94,11 +94,10 @@ function generateIndex(body) {
 			setTimeout(function() {
 				wnd.close();
 				console.log('close')
-			}, 2000);
+			}, 4000);
 		`);
 		// $e.attr('href', baseUrl + $e.attr('href'));
 		$e.attr('href', '#');
-		$e.attr('target', 'blank');
 		// $e.removeClass('ttip');
 	});
 
