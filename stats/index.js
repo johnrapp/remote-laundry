@@ -2,46 +2,25 @@
 
 const fs = require('fs');
 const request = require('request');
-// const express = require('express');
+const express = require('express');
 const cheerio = require('cheerio');
 // const cookieParser = require('cookie-parser');
 // const bodyParser = require('body-parser');
 
 const MongoClient = require('mongodb').MongoClient;
-const dburl = 'mongodb://db';
+const dburl = 'mongodb://db:27017';
 let db;
-MongoClient.connect(dburl, function(err, _db) {
-	if (err) {
-		return console.log('Mongo error', err);
-	}
 
-  console.log('Connected to Mongo');
-	db = _db;
 
-	db.collection('laundrySamples').insert({test: true}, function(err, docs) {
-		console.log('insert', err, docs)
-	});
-	db.collection('laundrySamples').find({}).toArray(function(err, docs) {
-		console.log('find', err, docs)
-	});
-	//
-	// request(url_gamla, (err, result, body) => {
-	// 	generateSample(body, 'gamla');
-	// });
-	// request(url_casa, (err, result, body) => {
-	// 	generateSample(body, 'casa');
-	// });
+var argv = require('minimist')(process.argv.slice(2));
+const port = argv.p || 8080;
+
+const app = express();
+
+app.listen(port, function () {
+	console.log(`Server listening on ${port}`);
 });
 
-
-// var argv = require('minimist')(process.argv.slice(2));
-// const port = argv.p || 8080;
-
-// const app = express();
-
-// app.listen(port, function () {
-// 	console.log(`Server listening on ${port}`);
-// });
 
 const baseUrl = 'https://www.malmonation.com/intern';
 const url_1602 = 'https://www.malmonation.com/intern/?p=laundry&house=gamla';
@@ -52,6 +31,29 @@ const url_casa = 'https://www.malmonation.com/intern/?p=laundry&house=casa';
 // app.use(cookieParser());
 // app.use(bodyParser.urlencoded({ extended: true }));
 
+MongoClient.connect(dburl, function(err, _db) {
+	if (err) {
+		return console.log('Mongo error', err);
+	}
+
+  console.log('Connected to Mongo');
+	db = _db;
+	db.laundrySamples = db.collection('laundrySamples');
+
+	request(url_gamla, (err, result, body) => {
+		generateSample(body, 'gamla');
+	});
+	request(url_casa, (err, result, body) => {
+		generateSample(body, 'casa');
+	});
+});
+
+
+app.get('/', (req, res) => {
+	db.laundrySamples.find({}).toArray(function(err, docs) {
+		res.send(docs);
+	});
+});
 
 function generateSample(body, house) {
 	const $ = cheerio.load(body);
@@ -116,7 +118,9 @@ function generateSample(body, house) {
 
 	console.log(sample);
 
-	db.collection('laundrySamples').insert(sample);
+	db.laundrySamples.insert(sample, function(err, docs) {
+		console.log('Inserted sample', err, docs)
+	});
 }
 
 function isBooked(img) {
