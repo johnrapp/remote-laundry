@@ -2,42 +2,59 @@
 
 const fs = require('fs');
 const request = require('request');
-const express = require('express');
+// const express = require('express');
 const cheerio = require('cheerio');
-const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
+// const cookieParser = require('cookie-parser');
+// const bodyParser = require('body-parser');
 
-var argv = require('minimist')(process.argv.slice(2));
-const port = argv.p || 8080;
+const MongoClient = require('mongodb').MongoClient;
+const dburl = 'mongodb://db';
+let db;
+MongoClient.connect(dburl, function(err, _db) {
+	if (err) {
+		return console.log('Mongo error', err);
+	}
 
-const app = express();
+  console.log('Connected to Mongo');
+	db = _db;
 
-app.listen(port, function () {
-	console.log(`Server listening on ${port}`);
+	db.collection('laundrySamples').insert({test: true}, function(err, docs) {
+		console.log('insert', err, docs)
+	});
+	db.collection('laundrySamples').find({}).toArray(function(err, docs) {
+		console.log('find', err, docs)
+	});
+	//
+	// request(url_gamla, (err, result, body) => {
+	// 	generateSample(body, 'gamla');
+	// });
+	// request(url_casa, (err, result, body) => {
+	// 	generateSample(body, 'casa');
+	// });
 });
+
+
+// var argv = require('minimist')(process.argv.slice(2));
+// const port = argv.p || 8080;
+
+// const app = express();
+
+// app.listen(port, function () {
+// 	console.log(`Server listening on ${port}`);
+// });
 
 const baseUrl = 'https://www.malmonation.com/intern';
 const url_1602 = 'https://www.malmonation.com/intern/?p=laundry&house=gamla';
 const url_gamla = 'https://www.malmonation.com/intern/?p=laundry&house=gamla';
 const url_casa = 'https://www.malmonation.com/intern/?p=laundry&house=casa';
 
-app.use(express.static('public'));
-app.use(cookieParser());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-// app.get('/', (req, res) => {
-request(url_casa, (err, result, body) => {
-  // request(url_gamla, (err, result, body) => {
-		generateIndex(body);
-    // res.send(generateIndex(body));
-  });
-// });
+// app.use(express.static('public'));
+// app.use(cookieParser());
+// app.use(bodyParser.urlencoded({ extended: true }));
 
 
-
-function generateIndex(body) {
+function generateSample(body, house) {
 	const $ = cheerio.load(body);
-
 
   const table = $('#tvattbokning');
 
@@ -46,7 +63,7 @@ function generateIndex(body) {
     const date = $(el.nextSibling);
 
     return {
-      day: day.text().trim(),
+      weekday: day.text().trim(),
       date: date.text().trim()
     };
   }).get();
@@ -74,11 +91,32 @@ function generateIndex(body) {
 
 	const bookings = bookingsFromRows(rows);
 
-	console.log(titles);
-	console.log(times);
-	console.log(bookings);
+	const weekdays = resolveWeekdays(titles.map(function(title) {
+		return title.weekday;
+	}));
 
-  return table.html();
+	// console.log(times);
+
+	// console.log(titles);
+	// console.log(weekdays);
+	// console.log(bookings);
+	const days = titles.map(function(title, i) {
+		return {
+			date: title.date,
+			weekday: weekdays[i],
+			bookings: bookings[i]
+		};
+	});
+
+	const sample = {
+		date: new Date(),
+		house: house,
+		days: days
+	};
+
+	console.log(sample);
+
+	db.collection('laundrySamples').insert(sample);
 }
 
 function isBooked(img) {
@@ -105,4 +143,20 @@ function bookingsFromRows(rows) {
 	});
 
 	return bookings;
+}
+
+const dayOrder = 'måndag tisdag onsdag torsdag fredag lördag söndag'.split(' ');
+function resolveWeekdays(days) {
+	const weekdays = [];
+
+	// 0 is always today, 1 is always tomorrow
+	for (let i = 2; i < days.length; i++) {
+		weekdays[i] = dayOrder.indexOf(days[i]);
+	}
+
+	// One day before
+	weekdays[1] = (weekdays[2] + dayOrder.length - 1) % dayOrder.length;
+	weekdays[0] = (weekdays[1] + dayOrder.length - 1) % dayOrder.length;
+
+	return weekdays;
 }

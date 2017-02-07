@@ -1,0 +1,10 @@
+db:
+  image: mongo
+  volumes:
+   - "/D/rl-stats:/data/db"
+rl-stats:
+  build: .
+  ports:
+   - "8080:8080"
+  links:
+   - db
