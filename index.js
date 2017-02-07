@@ -87,8 +87,19 @@ function generateIndex(body) {
 
 	//Remove all booking links
 	$('#tvattbokning a').each(function(i, e) {
-		$(e).attr('href', '#');
-		$(e).removeClass('ttip');
+		const $e = $(e);
+		// console.log($(e).attr('href'));
+		$e.attr('onclick', `
+			var wnd = window.open('${baseUrl + $(e).attr('href')}', 'window', 'width=1200, height=800');
+			setTimeout(function() {
+				wnd.close();
+				console.log('close')
+			}, 2000);
+		`);
+		// $e.attr('href', baseUrl + $e.attr('href'));
+		$e.attr('href', '#');
+		$e.attr('target', 'blank');
+		// $e.removeClass('ttip');
 	});
 
 	$('a[href="?page_id=766&p=laundry&house=gamla"]').attr('href', '/gamla');

@@ -7,7 +7,7 @@
 }
 
 #tvattbokning a {
-	cursor: default;
+	/*cursor: default;*/
 }
 
 @media (max-width: 600px) {
