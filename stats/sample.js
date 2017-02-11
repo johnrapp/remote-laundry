@@ -28,15 +28,29 @@ const url_casa = 'https://www.malmonation.com/intern/?p=laundry&house=casa';
 
 
 let db;
-module.export = function sample(_db) {
+module.exports = function sample(_db) {
   db = _db;
 
   console.log('Taking sample', new Date());
   request(url_gamla, (err, result, body) => {
-		generateSample(body, 'gamla');
+    if (err) {
+      return console.error('gamla err', err);
+    }
+    try {
+      generateSample(body, 'gamla');
+    } catch (e) {
+      console.error('sample error gamla');
+    }
 	});
 	request(url_casa, (err, result, body) => {
-		generateSample(body, 'casa');
+    if (err) {
+      return console.error('casa err', err);
+    }
+    try {
+		    generateSample(body, 'casa');
+    } catch (e) {
+      console.error('sample error casa');
+    }
 	});
 };
 
@@ -108,10 +122,11 @@ function generateSample(body, house) {
 		days: days
 	};
 
-	console.log(sample);
-
 	db.laundrySamples.insert(sample, function(err, docs) {
-		console.log('Inserted sample', err, docs)
+    if (err) {
+      return console.error('Insert error', err);
+    }
+		console.log('Inserted sample', house);
 	});
 }
 
