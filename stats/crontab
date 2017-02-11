@@ -1,2 +1,0 @@
-MAILTO=johnrappfarnes@gmail.com
-* * * * * echo "Hello world" `date` >> /var/log/cron.log 2>&1
