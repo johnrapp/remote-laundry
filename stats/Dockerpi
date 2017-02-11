@@ -1,0 +1,1 @@
+FROM hypriot/rpi-node:7.0.0-onbuild

@@ -1,0 +1,11 @@
+db:
+  image: jixer/rpi-mongo:2.4
+  volumes:
+   - "/home/pi/rl-stats-data:/data/db"
+rl-stats:
+  build: .
+  dockerfile: Dockerpi
+  ports:
+   - "8080:8080"
+  links:
+   - db
