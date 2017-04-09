@@ -1,8 +1,14 @@
 db:
   image: mongo
-rl-stats:
-  build: .
+sampler:
+  build: ./sampler
+  links:
+   - db
+viewer:
+  build: ./viewer
   ports:
    - "8080:8080"
   links:
    - db
+  volumes:
+   - "d:/GitHub/remote-laundy/stats/viewer/public:/usr/src/app/public"

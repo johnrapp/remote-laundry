@@ -1,0 +1,38 @@
+<h1>Viewer</h1>
+<div>
+	{{ $ctrl.sample.house }} - {{ $ctrl.sample.date | date:'HH:mm yyyy-MM-dd' }}
+</div>
+
+<table>
+	<tr>
+		<th>
+			<!-- Empty th for times -->
+		</th>
+		<th ng-repeat="day in $ctrl.sample.days">
+			<div>
+				{{ day.date }}
+			</div>
+			<div>
+				{{ $ctrl.dayNames[day.weekday] }}
+			</div>
+
+		</th>
+	</tr>
+	<tr ng-repeat="time in $ctrl.times">
+		<td>
+			{{ time }}	
+		</td>
+		<td ng-repeat="day in $ctrl.sample.days">
+			<div
+				ng-repeat="_ in $ctrl.maschines[$ctrl.sample.house]"
+				class="maschine"
+				ng-class="{'{{$ctrl.vacancyClass(day.bookings[$parent.$parent.$index], $index, $ctrl.maschines[$ctrl.sample.house].length)}}': true}">
+
+				<!-- {{ day.bookings[$parent.$parent.$index] }} -->
+			</div>
+			<!-- {{ day.bookings[$parent.$index] }} -->
+		</td>
+	</tr>
+</table>
+
+<input id="index-slider" ng-model="$ctrl.sampleIndex" ng-change="$ctrl.onSampleIndexChange()" type="range" min="0" max="500">

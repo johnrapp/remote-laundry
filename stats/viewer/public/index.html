@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+	<title>Laundry viewer</title>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular.js"></script>
+
+	<style type="text/css">
+		.maschine {
+			display: inline-block;
+			width: 20px;
+			height: 20px;
+		}
+
+		.maschine.vacant {
+			background: green;
+			/*background: black;*/
+		}
+
+		.maschine.busy {
+			background: red;
+			/*background: gray;*/
+		}
+
+		#index-slider {
+			width: 500px;
+		}
+	</style>
+</head>
+<body>
+
+	<laundry-viewer></laundry-viewer>
+
+	<script type="text/javascript">
+		angular.module('app', [])
+		.component('laundryViewer', {
+			templateUrl: 'laundry-viewer.html',
+			controller: LaundryViewerController
+		});
+
+		function LaundryViewerController($http) {
+			var $ctrl = this;
+
+			$ctrl.sampleIndex = 0;
+
+			$http.get('meta').then(function(response) {
+				$ctrl.times = response.data.times;
+				$ctrl.maschines = response.data.maschines;
+				$ctrl.dayNames = response.data.dayNames;
+			});
+
+			$http.get('sample/gamla/0').then(function(response) {
+				$ctrl.sample = response.data;
+				console.log($ctrl.sample)
+			});
+
+			$ctrl.vacancyClass = function(bookings, index, maschines) {
+				if (index < maschines - bookings) {
+					return 'vacant';
+				} else {
+					return 'busy';
+				}
+			}
+				console.log($ctrl.sampleIndex)
+
+			$ctrl.onSampleIndexChange = function() {
+				console.log($ctrl.sampleIndex)
+				$http.get(`sample/gamla/${$ctrl.sampleIndex}`).then(function(response) {
+					$ctrl.sample = response.data;
+					console.log($ctrl.sample)
+				});
+			};
+
+		}
+	</script>
+</body>
+</html>

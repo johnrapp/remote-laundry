@@ -4,27 +4,11 @@ const fs = require('fs');
 const request = require('request');
 // const express = require('express');
 const cheerio = require('cheerio');
-// const cookieParser = require('cookie-parser');
-// const bodyParser = require('body-parser');
-
-// var argv = require('minimist')(process.argv.slice(2));
-// const port = argv.p || 8080;
-
-// const app = express();
-
-// app.listen(port, function () {
-// 	console.log(`Server listening on ${port}`);
-// });
-
 
 const baseUrl = 'https://www.malmonation.com/intern';
 const url_1602 = 'https://www.malmonation.com/intern/?p=laundry&house=gamla';
 const url_gamla = 'https://www.malmonation.com/intern/?p=laundry&house=gamla';
 const url_casa = 'https://www.malmonation.com/intern/?p=laundry&house=casa';
-
-// app.use(express.static('public'));
-// app.use(cookieParser());
-// app.use(bodyParser.urlencoded({ extended: true }));
 
 
 let db;
@@ -53,13 +37,6 @@ module.exports = function sample(_db) {
     }
 	});
 };
-
-// TODO remove
-// app.get('/', (req, res) => {
-// 	db.laundrySamples.find({}).toArray(function(err, docs) {
-// 		res.send(docs);
-// 	});
-// });
 
 function generateSample(body, house) {
 	const $ = cheerio.load(body);
@@ -103,11 +80,6 @@ function generateSample(body, house) {
 		return title.weekday;
 	}));
 
-	// console.log(times);
-
-	// console.log(titles);
-	// console.log(weekdays);
-	// console.log(bookings);
 	const days = titles.map(function(title, i) {
 		return {
 			date: title.date,
